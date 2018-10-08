@@ -22889,7 +22889,7 @@ window.bind = {
                 navbar.getElementsByClassName('modal')[0].classList.add('is-active')
                 return
             }
-            vt = window.prompt("How many vote tokens to spend on the upvote?", 1);
+            var vt = window.prompt("How many vote tokens to spend on the upvote?", 1);
             var tx = {
                 type: 5,
                 data: {
@@ -22909,7 +22909,7 @@ window.bind = {
                 navbar.getElementsByClassName('modal')[0].classList.add('is-active')
                 return
             }
-            vt = window.prompt("How many vote tokens to spend on the downvote?", 1);
+            var vt = window.prompt("How many vote tokens to spend on the downvote?", 1);
             var tx = {
                 type: 5,
                 data: {
