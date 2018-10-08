@@ -197,7 +197,7 @@ var crypto = (self.crypto || self.msCrypto), QUOTA = 65536;
 
 window.avalon = {
     config: {
-        api: ['http://localhost:3001']
+        api: ['https://api.avalon.wtf']
     },
     init: (config) => {
         avalon.config = config
@@ -337,7 +337,7 @@ window.avalon = {
         return nodes[Math.floor(Math.random()*nodes.length)]
     }
 }
-bind = {
+window.bind = {
     navbar: function() {
         var loginModal = navbar.getElementsByClassName('modal')[0]
         var closeModal = navbar.getElementsByClassName('modal-close')[0]

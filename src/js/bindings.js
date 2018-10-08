@@ -1,4 +1,4 @@
-bind = {
+window.bind = {
     navbar: function() {
         var loginModal = navbar.getElementsByClassName('modal')[0]
         var closeModal = navbar.getElementsByClassName('modal-close')[0]
