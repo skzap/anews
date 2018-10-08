@@ -22531,7 +22531,7 @@ Router
                         results[i].downs += results[i].votes[y].vt
                 }
             }
-            results[i].totals = results[i].ups - results[i].downs
+            results[i].totals = results[i].ups + results[i].downs
             if (results[i].json.title)
                 proxy.new.contents.push(results[i])
         }
