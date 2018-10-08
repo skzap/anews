@@ -22930,7 +22930,7 @@ window.bind = {
 template.defaults.imports.percent = function(float) {
     return Math.round(10000*float)/100
 }
-template.defaults.imports.length = function(array) {
+template.defaults.imports.arrayLength = function(array) {
     if (!array || !array.length)
         return 0;
     return array.length
