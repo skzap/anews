@@ -62,21 +62,21 @@
             {{if user}}
             <div class="navbar-item">
                     <div class="field is-grouped">
-                        <p class="control tooltip is-tooltip-bottom" data-tooltip="Bandwidth">
+                        <p class="control tooltip is-tooltip-bottom" data-tooltip="Bandwidth (+1 byte per minute per coin you own; max 1MB)">
                             <progress class="progress is-primary" style="width: 100px" value="{{user.bw | growBandwidth}}" max="1048576"></progress>
                         </p>
                     </div>
                 </div>
                 <div class="navbar-item">
                     <div class="field is-grouped">
-                        <p class="control tooltip is-tooltip-bottom" data-tooltip="Balance">
+                        <p class="control tooltip is-tooltip-bottom" data-tooltip="Coins Balance">
                             <i class="fas fa-coins"></i> {{user.balance}}
                         </p>
                     </div>
                 </div>
                 <div class="navbar-item">
                     <div class="field is-grouped">
-                        <p class="control tooltip is-tooltip-bottom" data-tooltip="Vote Tokens">
+                        <p class="control tooltip is-tooltip-bottom" data-tooltip="Vote Tokens (+1 per hour per coin you own)">
                             <i class="fas fa-flask"></i> {{user.vt | growVoteTokens}}
                         </p>
                     </div>
@@ -103,8 +103,8 @@
             {{if user}}
                 <div class="navbar-item">
                     <div class="field is-grouped">
-                        <p class="control tooltip is-tooltip-bottom">
-                            <a class="button is-text">
+                        <p class="control">
+                            <a class="button signout is-text">
                                 <span>Sign-out</span>
                             </a>
                         </p>
@@ -144,6 +144,22 @@
                     <div class="field">
                         <p class="control">
                             <input id="inputLoginKey" class="input" type="password">
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label">No Account?</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <p class="control">
+                            Here is a private key: <code id="registerpriv">placeholder</code>
+                            <br />
+                            The associated public key is: <code id="registerpub">placeholder</code>
+                            <br />
+                            Don't know what to do with it? You're screwed
                         </p>
                     </div>
                 </div>

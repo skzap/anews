@@ -7,7 +7,12 @@ window.bind = {
         var loginCancel = navbar.getElementsByClassName('button cancel')[0]
 
         if (!proxy.user)
-            loginButton.onclick = () => loginModal.classList.add('is-active')
+            loginButton.onclick = () => {
+                loginModal.classList.add('is-active')
+                var keypair = avalon.keypair()
+                document.getElementById('registerpub').innerHTML = keypair.pub
+                document.getElementById('registerpriv').innerHTML = keypair.priv
+            }
         closeModal.onclick = () => loginModal.classList.remove('is-active')
         loginCancel.onclick = () => loginModal.classList.remove('is-active')
         loginConfirm.onclick = () => login()
@@ -44,6 +49,18 @@ window.bind = {
                     throw "Existing key but not matching username"
                 }
             })
+        }
+
+        function logOut() {
+            localStorage.setItem('user', null);
+            proxy.user = null
+            navbar.innerHTML = template('navbar.html', proxy)
+            bind.navbar()
+        }
+
+        if (proxy.user) {
+            var signoutButton = navbar.getElementsByClassName('button signout')[0]
+            signoutButton.onclick = () => logOut()
         }
 
         // Get all "navbar-burger" elements
