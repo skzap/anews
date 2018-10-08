@@ -10,6 +10,14 @@
                     <div class='box'>
                         <a href="#post/{{$value.author}}/{{$value.link}}"><h4 class="title is-4">{{$value.json.title}}</h4></a>
                         by {{$value.author}}
+                        |
+                        <a href="#post/{{$value.author}}/{{$value.link}}">
+                            {{if $value.child | isPlural}}
+                                {{$value.child | length}} <i class="fas fa-comments"></i>
+                            {{else}}
+                                {{$value.child | length}} <i class="fas fa-comment"></i>
+                            {{/if}}
+                        </a>
                     </div>
                 </div>
             </article>
