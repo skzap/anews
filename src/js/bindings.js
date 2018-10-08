@@ -184,7 +184,7 @@ window.bind = {
                 console.log(res)
             })
         },
-        downvote: function() {
+        downvote: function(item) {
             if (!proxy.user || !proxy.user.privatekey || !proxy.user.username) {
                 console.log('Needs to be logged in')
                 navbar.getElementsByClassName('modal')[0].classList.add('is-active')
