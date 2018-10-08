@@ -1,0 +1,25 @@
+<div id="post">
+    <div class="container">
+        <div class="is-pulled-left" style="margin-right: 15px;">{{include 'arrows.html'}}</div>
+
+        By: {{author}}
+        <h1 class="title">{{json.title}}</h1>
+        {{json.message}}        
+        <hr>
+        <div class="field">
+            <label class="label">Message</label>
+            <div class="control">
+                <textarea class="textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button submit is-link">Submit</button>
+            </div>
+        </div>
+        {{each replies}}
+            {{include 'replies.html' $value}}
+        {{/each}}
+    </div>
+</div>

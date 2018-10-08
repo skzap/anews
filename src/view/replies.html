@@ -1,0 +1,38 @@
+<article class="media">
+    <figure class="media-left">
+        {{include 'arrows.html'}}
+    </figure>
+    <div class="media-content">
+        <div class="content" data-author="{{author}}" data-link="{{link}}">
+            <p>
+                <strong>{{author}}</strong> <small>{{_id}}</small>
+                <br>
+                {{json.message}}
+            </p>
+    
+            <nav class="level is-mobile">
+                <div class="level-left">
+                    <a class="level-item" onclick="bind.replies(this)">
+                        Reply
+                    </a>
+                </div>
+            </nav>
+
+            <div class="reply" style="display: none">
+                <div class="field">
+                    <div class="control">
+                        <textarea class="textarea"></textarea>
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button submit is-link">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{each replies}}
+            {{include 'replies.html' $value}}
+        {{/each}}
+    </div>
+</article>

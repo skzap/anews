@@ -1,0 +1,18 @@
+<div id="new">
+    <div class="container">
+        <h1 class="title">Newest Contents</h1>
+        {{each contents}}
+            <article class="media">
+                <figure class="media-left">
+                    {{include 'arrows.html' $value}}
+                </figure>
+                <div class="media-content">
+                    <div class='box'>
+                        <a href="#post/{{$value.author}}/{{$value.link}}"><h4 class="title is-4">{{$value.json.title}}</h4></a>
+                        by {{$value.author}}
+                    </div>
+                </div>
+            </article>
+        {{/each}}
+    </div>
+</div>

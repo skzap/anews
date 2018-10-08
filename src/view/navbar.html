@@ -1,0 +1,89 @@
+<nav class="navbar is-transparent">
+    <div class="navbar-brand">
+        <a class="navbar-item">
+            A-NEWS
+        </a>
+        <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    
+    <div id="navbarExampleTransparentExample" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="#new">
+                New
+            </a>
+            {{if user}}
+                <a class="navbar-item" href="#submit">
+                    Submit
+                </a>
+            {{/if}}
+        </div>
+    
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="field is-grouped">
+                    {{if user}}
+                        <p class="control">
+                            <a class="button is-success profile">
+                                <span>{{user.username}} ({{user.balance}})</span>
+                            </a>
+                        </p>
+                    {{else}}
+                        <p class="control">
+                            <a class="button is-text is-focused login">
+                                <span class="icon">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </span>
+                                <span>Login</span>
+                            </a>
+                        </p>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="modal" id="modal-login">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Sign In</p>
+            <button class="delete modal-close" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label">User</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <p class="control">
+                            <input id="inputLoginUser" class="input" type="text">
+                        </p>
+                    </div>
+                </div>
+            </div>
+                
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label">Key</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <p class="control">
+                            <input id="inputLoginKey" class="input" type="password">
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success confirm">Login</button>
+            <button class="button cancel">Cancel</button>
+        </footer>
+    </div>
+</div>

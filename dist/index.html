@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Avalon News</title>
+        <link href="css/main.css" rel="stylesheet">
+        <script src="js/template-web.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ipfs/0.32.0-rc.1/index.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+        <link href="css/pageloader.css" rel="stylesheet">
+    </head>
+    
+    <body style='margin:0'>
+        <div class="pageloader is-active" id="pageloader"><span class="title">Loading...</span></div>
+        <div id="navbar-container"></div>
+        <div id="content"></div>
+        <script id="404.html" type="text/html"><div id="404">
+    <center>
+        <h1>404 Error</h1>
+        <h2>Route not found</h2>
+    </center>
+</div></script><script id="arrows.html" type="text/html"><a onclick="bind.arrows.upvote(this)" data-author="{{author}}" data-link="{{link}}">
+    <span class="icon">
+        <i class="fas fa-chevron-up"></i>
+    </span>
+</a>
+<div style="text-align:center;">
+    {{totals}}
+</div>
+<a onclick="bind.arrows.downvote(this)" data-author="{{author}}" data-link="{{link}}">
+    <span class="icon">
+        <i class="fas fa-chevron-down"></i>
+    </span>
+</a></script><script id="navbar.html" type="text/html"><nav class="navbar is-transparent">
+    <div class="navbar-brand">
+        <a class="navbar-item">
+            A-NEWS
+        </a>
+        <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    
+    <div id="navbarExampleTransparentExample" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="#new">
+                New
+            </a>
+            {{if user}}
+                <a class="navbar-item" href="#submit">
+                    Submit
+                </a>
+            {{/if}}
+        </div>
+    
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="field is-grouped">
+                    {{if user}}
+                        <p class="control">
+                            <a class="button is-success profile">
+                                <span>{{user.username}} ({{user.balance}})</span>
+                            </a>
+                        </p>
+                    {{else}}
+                        <p class="control">
+                            <a class="button is-text is-focused login">
+                                <span class="icon">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </span>
+                                <span>Login</span>
+                            </a>
+                        </p>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="modal" id="modal-login">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Sign In</p>
+            <button class="delete modal-close" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label">User</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <p class="control">
+                            <input id="inputLoginUser" class="input" type="text">
+                        </p>
+                    </div>
+                </div>
+            </div>
+                
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label">Key</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <p class="control">
+                            <input id="inputLoginKey" class="input" type="password">
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success confirm">Login</button>
+            <button class="button cancel">Cancel</button>
+        </footer>
+    </div>
+</div></script><script id="new.html" type="text/html"><div id="new">
+    <div class="container">
+        <h1 class="title">Newest Contents</h1>
+        {{each contents}}
+            <article class="media">
+                <figure class="media-left">
+                    {{include 'arrows.html' $value}}
+                </figure>
+                <div class="media-content">
+                    <div class='box'>
+                        <a href="#post/{{$value.author}}/{{$value.link}}"><h4 class="title is-4">{{$value.json.title}}</h4></a>
+                        by {{$value.author}}
+                    </div>
+                </div>
+            </article>
+        {{/each}}
+    </div>
+</div></script><script id="post.html" type="text/html"><div id="post">
+    <div class="container">
+        <div class="is-pulled-left" style="margin-right: 15px;">{{include 'arrows.html'}}</div>
+
+        By: {{author}}
+        <h1 class="title">{{json.title}}</h1>
+        {{json.message}}        
+        <hr>
+        <div class="field">
+            <label class="label">Message</label>
+            <div class="control">
+                <textarea class="textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button submit is-link">Submit</button>
+            </div>
+        </div>
+        {{each replies}}
+            {{include 'replies.html' $value}}
+        {{/each}}
+    </div>
+</div></script><script id="replies.html" type="text/html"><article class="media">
+    <figure class="media-left">
+        {{include 'arrows.html'}}
+    </figure>
+    <div class="media-content">
+        <div class="content" data-author="{{author}}" data-link="{{link}}">
+            <p>
+                <strong>{{author}}</strong> <small>{{_id}}</small>
+                <br>
+                {{json.message}}
+            </p>
+    
+            <nav class="level is-mobile">
+                <div class="level-left">
+                    <a class="level-item" onclick="bind.replies(this)">
+                        Reply
+                    </a>
+                </div>
+            </nav>
+
+            <div class="reply" style="display: none">
+                <div class="field">
+                    <div class="control">
+                        <textarea class="textarea"></textarea>
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button submit is-link">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{each replies}}
+            {{include 'replies.html' $value}}
+        {{/each}}
+    </div>
+</article></script><script id="submit.html" type="text/html"><div id="submit">
+    <div class="container">
+        <hr>
+        <h1 class="title">Submit a new content</h1>
+        <div class="field">
+            <label class="label">Title</label>
+            <div class="control">
+                <input class="input" type="text">
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Message</label>
+            <div class="control">
+                <textarea class="textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button submit is-link">Submit</button>
+            </div>
+            <div class="control">
+                <button class="button cancel is-text">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div></script>
+        <script src="js/index.min.js"></script>
+    </body>
+</html>
