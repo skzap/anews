@@ -15,7 +15,9 @@
     "art-template": "^4.12.2",
     "bs58": "^4.0.1",
     "crypto-js": "^3.1.9-1",
-    "secp256k1": "^3.5.2"
+    "markdown": "^0.5.0",
+    "secp256k1": "^3.5.2",
+    "xss": "^1.0.3"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",

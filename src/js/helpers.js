@@ -1,3 +1,6 @@
+var markdown = require( "markdown" ).markdown
+var xss = require("xss")
+
 template.defaults.imports.percent = function(float) {
     return Math.round(10000*float)/100
 }
@@ -13,4 +16,7 @@ template.defaults.imports.isPlural = function(array) {
         return true
     else
         return false
+}
+template.defaults.imports.markdown = function(raw) {
+    return filterXSS(markdown.toHTML(raw))
 }

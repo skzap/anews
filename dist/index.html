@@ -152,7 +152,7 @@
 
         By: {{author}}
         <h1 class="title">{{json.title}}</h1>
-        {{json.message}}        
+        {{@ json.message | markdown}}        
         <hr>
         <div class="field">
             <label class="label">Message</label>
@@ -179,7 +179,7 @@
             <p>
                 <strong>{{author}}</strong> <small>{{_id}}</small>
                 <br>
-                {{json.message}}
+                {{@ json.message | markdown}}    
             </p>
     
             <nav class="level is-mobile">
