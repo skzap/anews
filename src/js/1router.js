@@ -136,7 +136,7 @@ Router
                     content.downs += content.votes[i].vt
             }
         }
-        content.totals = content.ups - content.downs
+        content.totals = content.ups + content.downs
         console.log(content)
         document.getElementById('content').innerHTML = template('post.html', content)
         bind.post()

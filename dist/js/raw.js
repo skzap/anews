@@ -179,7 +179,7 @@ Router
                     content.downs += content.votes[i].vt
             }
         }
-        content.totals = content.ups - content.downs
+        content.totals = content.ups + content.downs
         console.log(content)
         document.getElementById('content').innerHTML = template('post.html', content)
         bind.post()
@@ -256,7 +256,7 @@ window.avalon = {
                         comment.downs += comment.votes[i].vt
                 }
             }
-            comment.totals = comment.ups - comment.downs
+            comment.totals = comment.ups + comment.downs
             console.log(comment)
             replies.push(comment)
         }

@@ -65,7 +65,7 @@ window.avalon = {
                         comment.downs += comment.votes[i].vt
                 }
             }
-            comment.totals = comment.ups - comment.downs
+            comment.totals = comment.ups + comment.downs
             console.log(comment)
             replies.push(comment)
         }
