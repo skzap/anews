@@ -32,6 +32,8 @@ window.bind = {
                 if (chainuser.pub == user.publickey) {
                     user.username = username
                     user.balance = chainuser.balance
+                    user.vt = chainuser.vt
+                    user.bw = chainuser.bw
                     localStorage.setItem('user', JSON.stringify(user));
                     proxy.user = user
                     console.log('Logged in as '+proxy.user.username)

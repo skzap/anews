@@ -142,6 +142,27 @@ Router
         bind.post()
     })
 })
+.add(/u\/(.*)/, function() {
+    var author = arguments[0]
+    var link = arguments[1]
+    avalon.getContent(author, link, function(err, content) {
+        content.replies = avalon.generateCommentTree(content, content.author, content.link)
+        content.ups = 0
+        content.downs = 0
+        if (content.votes) {
+            for (let i = 0; i < content.votes.length; i++) {
+                if (content.votes[i].vt > 0)
+                    content.ups += content.votes[i].vt
+                if (content.votes[i].vt < 0)
+                    content.downs += content.votes[i].vt
+            }
+        }
+        content.totals = content.ups + content.downs
+        console.log(content)
+        document.getElementById('content').innerHTML = template('post.html', content)
+        bind.post()
+    })
+})
 .add(function() {
     document.getElementById('content').innerHTML = template('404.html', {})
 })

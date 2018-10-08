@@ -23,24 +23,45 @@
         </div>
     
         <div class="navbar-end">
+            {{if user}}
+            <div class="navbar-item">
+                    <div class="field is-grouped">
+                        <p class="control tooltip is-tooltip-bottom" data-tooltip="Bandwidth">
+                            <progress class="progress is-primary" style="width: 100px" value="{{user.bw | growBandwidth}}" max="1048576"></progress>
+                        </p>
+                    </div>
+                </div>
+                <div class="navbar-item">
+                    <div class="field is-grouped">
+                        <p class="control tooltip is-tooltip-bottom" data-tooltip="Balance">
+                            <i class="fas fa-coins"></i> {{user.balance}}
+                        </p>
+                    </div>
+                </div>
+                <div class="navbar-item">
+                    <div class="field is-grouped">
+                        <p class="control tooltip is-tooltip-bottom" data-tooltip="Vote Tokens">
+                            <i class="fas fa-flask"></i> {{user.vt | growVoteTokens}}
+                        </p>
+                    </div>
+                </div>
+            {{/if}}            
             <div class="navbar-item">
                 <div class="field is-grouped">
-                    {{if user}}
-                        <p class="control">
+                    <p class="control">
+                        {{if user}}
                             <a class="button is-success profile">
-                                <span>{{user.username}} ({{user.balance}})</span>
+                                <span>{{user.username}}</span>
                             </a>
-                        </p>
-                    {{else}}
-                        <p class="control">
+                        {{else}}
                             <a class="button is-text is-focused login">
                                 <span class="icon">
                                     <i class="fas fa-sign-in-alt"></i>
                                 </span>
                                 <span>Login</span>
                             </a>
-                        </p>
-                    {{/if}}
+                        {{/if}}
+                    </p>
                 </div>
             </div>
         </div>

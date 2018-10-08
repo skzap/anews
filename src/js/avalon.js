@@ -6,7 +6,7 @@ var crypto = (self.crypto || self.msCrypto), QUOTA = 65536;
 
 window.avalon = {
     config: {
-        api: ['https://api.avalon.wtf']
+        api: ['http://localhost:3001']
     },
     init: (config) => {
         avalon.config = config

@@ -23162,6 +23162,27 @@ Router
         bind.post()
     })
 })
+.add(/u\/(.*)/, function() {
+    var author = arguments[0]
+    var link = arguments[1]
+    avalon.getContent(author, link, function(err, content) {
+        content.replies = avalon.generateCommentTree(content, content.author, content.link)
+        content.ups = 0
+        content.downs = 0
+        if (content.votes) {
+            for (let i = 0; i < content.votes.length; i++) {
+                if (content.votes[i].vt > 0)
+                    content.ups += content.votes[i].vt
+                if (content.votes[i].vt < 0)
+                    content.downs += content.votes[i].vt
+            }
+        }
+        content.totals = content.ups + content.downs
+        console.log(content)
+        document.getElementById('content').innerHTML = template('post.html', content)
+        bind.post()
+    })
+})
 .add(function() {
     document.getElementById('content').innerHTML = template('404.html', {})
 })
@@ -23174,7 +23195,7 @@ var crypto = (self.crypto || self.msCrypto), QUOTA = 65536;
 
 window.avalon = {
     config: {
-        api: ['https://api.avalon.wtf']
+        api: ['http://localhost:3001']
     },
     init: (config) => {
         avalon.config = config
@@ -23348,6 +23369,8 @@ window.bind = {
                 if (chainuser.pub == user.publickey) {
                     user.username = username
                     user.balance = chainuser.balance
+                    user.vt = chainuser.vt
+                    user.bw = chainuser.bw
                     localStorage.setItem('user', JSON.stringify(user));
                     proxy.user = user
                     console.log('Logged in as '+proxy.user.username)
@@ -23527,6 +23550,48 @@ window.bind = {
 var markdown = require( "markdown" ).markdown
 var xss = require("xss")
 
+class GrowInt {
+    constructor(raw, config) {
+        if (!config.min)
+            config.min = Number.MIN_SAFE_INTEGER
+        if (!config.max)
+            config.max = Number.MAX_SAFE_INTEGER
+        this.v = raw.v
+        this.t = raw.t
+        this.config = config
+    }
+
+    grow(time) {
+        if (time < this.t) return
+        if (this.config.growth == 0) return {
+            v: this.v,
+            t: time
+        }
+
+        var tmpValue = this.v
+        tmpValue += (time-this.t)*this.config.growth
+        
+        if (this.config.growth > 0) {
+            var newValue = Math.floor(tmpValue)
+            var newTime = Math.ceil(this.t + ((newValue-this.v)/this.config.growth))
+        } else {
+            var newValue = Math.ceil(tmpValue)
+            var newTime = Math.floor(this.t + ((newValue-this.v)/this.config.growth))
+        }
+
+        if (newValue > this.config.max)
+            newValue = this.config.max
+
+        if (newValue < this.config.min)
+            newValue = this.config.min
+
+        return {
+            v: newValue,
+            t: newTime
+        }
+    }
+}
+
 template.defaults.imports.percent = function(float) {
     return Math.round(10000*float)/100
 }
@@ -23545,6 +23610,14 @@ template.defaults.imports.isPlural = function(array) {
 }
 template.defaults.imports.markdown = function(raw) {
     return filterXSS(markdown.toHTML(raw))
+}
+template.defaults.imports.growBandwidth = function(raw) {
+    return new GrowInt(raw, {growth:proxy.user.balance/(60000), max:1048576})
+        .grow(new Date().getTime()).v
+}
+template.defaults.imports.growVoteTokens = function(raw, balance) {
+    return new GrowInt(raw, {growth:proxy.user.balance/(3600000)})
+        .grow(new Date().getTime()).v
 }
 var templates = []
 
@@ -23581,6 +23654,8 @@ if (user) {
         var chainuser = result[0]
         if (chainuser.pub == user.publickey) {
             user.balance = chainuser.balance
+            user.vt = chainuser.vt
+            user.bw = chainuser.bw
             localStorage.setItem('user', JSON.stringify(user));
             proxy.user = user
             console.log('Logged in as '+proxy.user.username)
