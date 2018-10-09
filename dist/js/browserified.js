@@ -23163,28 +23163,31 @@ Router
     })
 })
 .add(/u\/(.*)/, function() {
-    var author = arguments[0]
-    var link = arguments[1]
-    avalon.getContent(author, link, function(err, content) {
-        content.replies = avalon.generateCommentTree(content, content.author, content.link)
-        content.ups = 0
-        content.downs = 0
-        if (content.votes) {
-            for (let i = 0; i < content.votes.length; i++) {
-                if (content.votes[i].vt > 0)
-                    content.ups += content.votes[i].vt
-                if (content.votes[i].vt < 0)
-                    content.downs += content.votes[i].vt
-            }
-        }
-        content.totals = content.ups + content.downs
-        console.log(content)
-        document.getElementById('content').innerHTML = template('post.html', content)
-        bind.post()
-    })
+    // TODO
 })
 .add(function() {
-    document.getElementById('content').innerHTML = template('404.html', {})
+    avalon.getHotDiscussions(function(err, results) {
+        proxy.hot.contents = []
+        for (let i = 0; i < results.length; i++) {
+            const element = results[i];
+            results[i].ups = 0
+            results[i].downs = 0
+            if (results[i].votes) {
+                for (let y = 0; y < results[i].votes.length; y++) {
+                    if (results[i].votes[y].vt > 0)
+                        results[i].ups += results[i].votes[y].vt
+                    if (results[i].votes[y].vt < 0)
+                        results[i].downs += results[i].votes[y].vt
+                }
+            }
+            results[i].totals = results[i].ups + results[i].downs
+            if (results[i].json.title)
+                proxy.hot.contents.push(results[i])
+        }
+        
+        document.getElementById('content').innerHTML = template('hot.html', proxy.hot)
+        bind.hot()
+    })
 })
 .listen()
 var CryptoJS = require("crypto-js")
@@ -23195,7 +23198,7 @@ var crypto = (self.crypto || self.msCrypto), QUOTA = 65536;
 
 window.avalon = {
     config: {
-        api: ['https://api.avalon.wtf']
+        api: ['http://localhost:3001']
     },
     init: (config) => {
         avalon.config = config
@@ -23233,7 +23236,7 @@ window.avalon = {
             cb(null, res)
         });
     },
-    generateCommentTree(root, author, link) {
+    generateCommentTree: (root, author, link) => {
         var replies = []
         if (author == root.author && link == root.link) {
             var content = root
@@ -23265,6 +23268,17 @@ window.avalon = {
     },
     getNewDiscussions: (cb) => {
         fetch(avalon.randomNode()+'/new', {
+            method: 'get',
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json'
+            }
+        }).then(res => res.json()).then(function(res) {
+            cb(null, res)
+        });
+    },
+    getHotDiscussions: (cb) => {
+        fetch(avalon.randomNode()+'/hot', {
             method: 'get',
             headers: {
               'Accept': 'application/json, text/plain, */*',
@@ -23460,6 +23474,9 @@ window.bind = {
         }
     },
     new: function() {
+        
+    },
+    hot: function() {
         
     },
     post: function() {

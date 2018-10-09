@@ -6,7 +6,7 @@ var crypto = (self.crypto || self.msCrypto), QUOTA = 65536;
 
 window.avalon = {
     config: {
-        api: ['https://api.avalon.wtf']
+        api: ['http://localhost:3001']
     },
     init: (config) => {
         avalon.config = config
@@ -44,7 +44,7 @@ window.avalon = {
             cb(null, res)
         });
     },
-    generateCommentTree(root, author, link) {
+    generateCommentTree: (root, author, link) => {
         var replies = []
         if (author == root.author && link == root.link) {
             var content = root
@@ -76,6 +76,17 @@ window.avalon = {
     },
     getNewDiscussions: (cb) => {
         fetch(avalon.randomNode()+'/new', {
+            method: 'get',
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json'
+            }
+        }).then(res => res.json()).then(function(res) {
+            cb(null, res)
+        });
+    },
+    getHotDiscussions: (cb) => {
+        fetch(avalon.randomNode()+'/hot', {
             method: 'get',
             headers: {
               'Accept': 'application/json, text/plain, */*',

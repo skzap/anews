@@ -34,11 +34,33 @@
     <span class="icon">
         <i class="fas fa-chevron-down"></i>
     </span>
-</a></script><script id="navbar.html" type="text/html"><nav class="navbar is-transparent">
+</a></script><script id="hot.html" type="text/html"><div id="hot">
+    <div class="container">
+        <h1 class="title">Hotest Contents</h1>
+        {{each contents}}
+            <article class="media">
+                <figure class="media-left">
+                    {{include 'arrows.html' $value}}
+                </figure>
+                <div class="media-content">
+                    <div class='box'>
+                        <a href="#post/{{$value.author}}/{{$value.link}}"><h4 class="title is-4">{{$value.json.title}}</h4></a>
+                        by {{$value.author}}
+                        |
+                        <a href="#post/{{$value.author}}/{{$value.link}}">
+                            {{if $value.child | isPlural}}
+                                {{$value.child | arrayLength}} <i class="fas fa-comments"></i>
+                            {{else}}
+                                {{$value.child | arrayLength}} <i class="fas fa-comment"></i>
+                            {{/if}}
+                        </a>
+                    </div>
+                </div>
+            </article>
+        {{/each}}
+    </div>
+</div></script><script id="navbar.html" type="text/html"><nav class="navbar is-transparent">
     <div class="navbar-brand">
-        <a class="navbar-item">
-            A-NEWS
-        </a>
         <div class="navbar-burger burger" data-target="navbarAvalon">
             <span></span>
             <span></span>
@@ -48,6 +70,9 @@
     
     <div id="navbarAvalon" class="navbar-menu">
         <div class="navbar-start">
+            <a class="navbar-item" href="#">
+                Hot
+            </a>
             <a class="navbar-item" href="#new">
                 New
             </a>
@@ -94,7 +119,7 @@
                                 <span class="icon">
                                     <i class="fas fa-sign-in-alt"></i>
                                 </span>
-                                <span>Login</span>
+                                <span>Sign-in</span>
                             </a>
                         {{/if}}
                     </p>
@@ -166,7 +191,7 @@
             </div>
         </section>
         <footer class="modal-card-foot">
-            <button class="button is-success confirm">Login</button>
+            <button class="button is-success confirm">Sign-in</button>
             <button class="button cancel">Cancel</button>
         </footer>
     </div>
