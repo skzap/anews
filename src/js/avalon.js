@@ -7,6 +7,7 @@ var crypto = (self.crypto || self.msCrypto), QUOTA = 65536;
 window.avalon = {
     config: {
         api: ['https://api.avalon.wtf']
+        //api: ['http://localhost:3001']
     },
     init: (config) => {
         avalon.config = config
@@ -66,13 +67,23 @@ window.avalon = {
                 }
             }
             comment.totals = comment.ups + comment.downs
-            console.log(comment)
             replies.push(comment)
         }
         replies = replies.sort(function(a,b) {
             return b.totals-a.totals
         })
         return replies
+    },
+    getDiscussionsByAuthor: (username, cb) => {
+        fetch(avalon.randomNode()+'/blog/'+username, {
+            method: 'get',
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json'
+            }
+        }).then(res => res.json()).then(function(res) {
+            cb(null, res)
+        });
     },
     getNewDiscussions: (cb) => {
         fetch(avalon.randomNode()+'/new', {

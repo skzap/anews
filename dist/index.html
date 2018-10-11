@@ -34,7 +34,32 @@
     <span class="icon">
         <i class="fas fa-chevron-down"></i>
     </span>
-</a></script><script id="hot.html" type="text/html"><div id="hot">
+</a></script><script id="blog.html" type="text/html"><div id="blog">
+    <div class="container">
+        <h1 class="title">Contents from {{username}}</h1>
+        {{each contents}}
+            <article class="media">
+                <figure class="media-left">
+                    {{include 'arrows.html' $value}}
+                </figure>
+                <div class="media-content">
+                    <div class='box'>
+                        <a href="#post/{{$value.author}}/{{$value.link}}"><h4 class="title is-4">{{$value.json.title}}</h4></a>
+                        by <a href="#u/{{$value.author}}">{{$value.author}}</a>
+                        |
+                        <a href="#post/{{$value.author}}/{{$value.link}}">
+                            {{if $value.child | isPlural}}
+                                {{$value.child | arrayLength}} <i class="fas fa-comments"></i>
+                            {{else}}
+                                {{$value.child | arrayLength}} <i class="fas fa-comment"></i>
+                            {{/if}}
+                        </a>
+                    </div>
+                </div>
+            </article>
+        {{/each}}
+    </div>
+</div></script><script id="hot.html" type="text/html"><div id="hot">
     <div class="container">
         <h1 class="title">Hotest Contents</h1>
         {{each contents}}
@@ -45,7 +70,7 @@
                 <div class="media-content">
                     <div class='box'>
                         <a href="#post/{{$value.author}}/{{$value.link}}"><h4 class="title is-4">{{$value.json.title}}</h4></a>
-                        by {{$value.author}}
+                        by <a href="#u/{{$value.author}}">{{$value.author}}</a>
                         |
                         <a href="#post/{{$value.author}}/{{$value.link}}">
                             {{if $value.child | isPlural}}
@@ -111,7 +136,7 @@
                 <div class="field is-grouped">
                     <p class="control">
                         {{if user}}
-                            <a class="button is-success profile">
+                            <a href="#u/{{user.username}}" class="button is-success profile">
                                 <span>{{user.username}}</span>
                             </a>
                         {{else}}
@@ -206,7 +231,7 @@
                 <div class="media-content">
                     <div class='box'>
                         <a href="#post/{{$value.author}}/{{$value.link}}"><h4 class="title is-4">{{$value.json.title}}</h4></a>
-                        by {{$value.author}}
+                        by <a href="#u/{{$value.author}}">{{$value.author}}</a>
                         |
                         <a href="#post/{{$value.author}}/{{$value.link}}">
                             {{if $value.child | isPlural}}
@@ -224,7 +249,7 @@
     <div class="container">
         <div class="is-pulled-left" style="margin-right: 15px;">{{include 'arrows.html'}}</div>
 
-        By: {{author}}
+        By <a href="#u/{{author}}">{{author}}</a>
         <h1 class="title">{{json.title}}</h1>
         {{@ json.message | markdown}}        
         <hr>

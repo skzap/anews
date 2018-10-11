@@ -9,7 +9,7 @@ window.proxy = new Proxy({},{
   
 function set(obj, prop, value) {
     obj[prop] = value;
-    console.log(obj, prop, value)
+    //console.log(obj, prop, value)
     // for single values where we dont want to update the full template
     if (!obj._template && document.getElementById(prop)) {
         document.getElementById(prop).innerHTML = value

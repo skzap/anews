@@ -9,7 +9,7 @@ window.proxy = new Proxy({},{
   
 function set(obj, prop, value) {
     obj[prop] = value;
-    console.log(obj, prop, value)
+    //console.log(obj, prop, value)
     // for single values where we dont want to update the full template
     if (!obj._template && document.getElementById(prop)) {
         document.getElementById(prop).innerHTML = value
@@ -180,19 +180,40 @@ Router
             }
         }
         content.totals = content.ups + content.downs
-        console.log(content)
         document.getElementById('content').innerHTML = template('post.html', content)
         bind.post()
     })
 })
 .add(/u\/(.*)/, function() {
-    // TODO
+    var author = arguments[0]
+    proxy.blog = {}
+    avalon.getDiscussionsByAuthor(author, function(err, results) {
+        proxy.blog.contents = []
+        proxy.blog.username = author
+        for (let i = 0; i < results.length; i++) {
+            results[i].ups = 0
+            results[i].downs = 0
+            if (results[i].votes) {
+                for (let y = 0; y < results[i].votes.length; y++) {
+                    if (results[i].votes[y].vt > 0)
+                        results[i].ups += results[i].votes[y].vt
+                    if (results[i].votes[y].vt < 0)
+                        results[i].downs += results[i].votes[y].vt
+                }
+            }
+            results[i].totals = results[i].ups + results[i].downs
+            if (results[i].json.title)
+                proxy.blog.contents.push(results[i])
+        }
+
+        document.getElementById('content').innerHTML = template('blog.html', proxy.blog)
+        bind.blog()
+    })
 })
 .add(function() {
     avalon.getHotDiscussions(function(err, results) {
         proxy.hot.contents = []
         for (let i = 0; i < results.length; i++) {
-            const element = results[i];
             results[i].ups = 0
             results[i].downs = 0
             if (results[i].votes) {
@@ -222,6 +243,7 @@ var crypto = (self.crypto || self.msCrypto), QUOTA = 65536;
 window.avalon = {
     config: {
         api: ['https://api.avalon.wtf']
+        //api: ['http://localhost:3001']
     },
     init: (config) => {
         avalon.config = config
@@ -281,13 +303,23 @@ window.avalon = {
                 }
             }
             comment.totals = comment.ups + comment.downs
-            console.log(comment)
             replies.push(comment)
         }
         replies = replies.sort(function(a,b) {
             return b.totals-a.totals
         })
         return replies
+    },
+    getDiscussionsByAuthor: (username, cb) => {
+        fetch(avalon.randomNode()+'/blog/'+username, {
+            method: 'get',
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json'
+            }
+        }).then(res => res.json()).then(function(res) {
+            cb(null, res)
+        });
     },
     getNewDiscussions: (cb) => {
         fetch(avalon.randomNode()+'/new', {
@@ -500,6 +532,9 @@ window.bind = {
         
     },
     hot: function() {
+        
+    },
+    blog: function() {
         
     },
     post: function() {

@@ -128,6 +128,9 @@ window.bind = {
     hot: function() {
         
     },
+    blog: function() {
+        
+    },
     post: function() {
         var replyButton = post.getElementsByClassName('submit')[0]
         var replyMessage = post.getElementsByClassName('textarea')[0]

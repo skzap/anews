@@ -137,19 +137,40 @@ Router
             }
         }
         content.totals = content.ups + content.downs
-        console.log(content)
         document.getElementById('content').innerHTML = template('post.html', content)
         bind.post()
     })
 })
 .add(/u\/(.*)/, function() {
-    // TODO
+    var author = arguments[0]
+    proxy.blog = {}
+    avalon.getDiscussionsByAuthor(author, function(err, results) {
+        proxy.blog.contents = []
+        proxy.blog.username = author
+        for (let i = 0; i < results.length; i++) {
+            results[i].ups = 0
+            results[i].downs = 0
+            if (results[i].votes) {
+                for (let y = 0; y < results[i].votes.length; y++) {
+                    if (results[i].votes[y].vt > 0)
+                        results[i].ups += results[i].votes[y].vt
+                    if (results[i].votes[y].vt < 0)
+                        results[i].downs += results[i].votes[y].vt
+                }
+            }
+            results[i].totals = results[i].ups + results[i].downs
+            if (results[i].json.title)
+                proxy.blog.contents.push(results[i])
+        }
+
+        document.getElementById('content').innerHTML = template('blog.html', proxy.blog)
+        bind.blog()
+    })
 })
 .add(function() {
     avalon.getHotDiscussions(function(err, results) {
         proxy.hot.contents = []
         for (let i = 0; i < results.length; i++) {
-            const element = results[i];
             results[i].ups = 0
             results[i].downs = 0
             if (results[i].votes) {
