@@ -15,16 +15,19 @@
             <a class="navbar-item" href="#new">
                 New
             </a>
-            {{if user}}
-                <a class="navbar-item" href="#submit">
-                    Submit
-                </a>
-            {{/if}}
         </div>
     
         <div class="navbar-end">
             {{if user}}
-            <div class="navbar-item">
+                <a class="navbar-item" href="#submit">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+                <a class="navbar-item" href="#create-acc">
+                    <i class="fas fa-user-plus"></i>
+                </a>
+            {{/if}}
+            {{if user}}
+                <div class="navbar-item">
                     <div class="field is-grouped">
                         <p class="control tooltip is-tooltip-bottom" data-tooltip="Bandwidth (+1 byte per minute per coin you own; max 1MB)">
                             <progress class="progress is-primary" style="width: 100px" value="{{user.bw | growBandwidth}}" max="1048576"></progress>

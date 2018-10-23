@@ -164,6 +164,10 @@ Router
     document.getElementById('content').innerHTML = template('submit.html', {})
     bind.submit()
 })
+.add(/create-acc/, function() {
+    document.getElementById('content').innerHTML = template('createacc.html', {})
+    bind.createacc()
+})
 .add(/post\/(.*)\/(.*)/, function() {
     var author = arguments[0]
     var link = arguments[1]
@@ -536,6 +540,45 @@ window.bind = {
     },
     blog: function() {
         
+    },
+    createacc: function() {
+        var inputPubKey = createacc.getElementsByClassName('input')[0]
+        var inputUsername = createacc.getElementsByClassName('input')[1]
+        var submitButton = createacc.getElementsByClassName('button submit')[0]
+        var cancelButton = createacc.getElementsByClassName('button cancel')[0]
+
+        submitButton.onclick = () => {
+            if (!proxy.user || !proxy.user.privatekey || !proxy.user.username) {
+                console.log('Needs to be logged in')
+                navbar.getElementsByClassName('modal')[0].classList.add('is-active')
+                return
+            }
+            if (!inputUsername.value || inputUsername.value.length == 0)
+                inputUsername.value = inputPubKey.value.toLowerCase()
+
+            var tx = {
+                type: 0,
+                data: {
+                    name: inputUsername.value,
+                    pub: inputPubKey.value
+                }
+            }
+            tx = avalon.sign(proxy.user.privatekey, proxy.user.username, tx)
+            submitButton.classList.add('is-loading')
+            avalon.sendTransaction(tx, function(res) {
+                submitButton.classList.remove('is-loading')
+                console.log(res)
+                document.getElementById("resUsername").innerHTML = inputUsername.value
+                document.getElementById("resPubKey").innerHTML = inputPubKey.value
+                document.getElementById("new-account-success").style.display = "block"
+                inputPubKey.value = ""
+                inputUsername.value = ""
+            })
+        }
+        cancelButton.onclick = () => {
+            inputPubKey.value = ""
+            inputUsername.value = ""
+        }
     },
     post: function() {
         var replyButton = post.getElementsByClassName('submit')[0]

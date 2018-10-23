@@ -121,6 +121,10 @@ Router
     document.getElementById('content').innerHTML = template('submit.html', {})
     bind.submit()
 })
+.add(/create-acc/, function() {
+    document.getElementById('content').innerHTML = template('createacc.html', {})
+    bind.createacc()
+})
 .add(/post\/(.*)\/(.*)/, function() {
     var author = arguments[0]
     var link = arguments[1]

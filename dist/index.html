@@ -59,6 +59,38 @@
             </article>
         {{/each}}
     </div>
+</div></script><script id="createacc.html" type="text/html"><div id="createacc">
+    <div class="container">
+        <hr>
+        <div class="notification is-link" id="new-account-success" style="display:none">
+            Account Created!<br />
+            Username: <strong><span id="resUsername"></span></strong><br />
+            Public Key: <strong><span id="resPubKey"></span></strong>
+        </div>
+        <h1 class="title">Create a new account (for a friend?)</h1>
+        <div class="field">
+            <label class="label">Public Key</label>
+            <div class="control">
+                <input class="input" type="text">
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Username (costs 60 tokens)</label>
+            <div class="control">
+                <input class="input" type="text">
+            </div>
+        </div>
+
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button submit is-link">Submit</button>
+            </div>
+            <div class="control">
+                <button class="button cancel is-text">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div></script><script id="hot.html" type="text/html"><div id="hot">
     <div class="container">
         <h1 class="title">Hotest Contents</h1>
@@ -101,16 +133,19 @@
             <a class="navbar-item" href="#new">
                 New
             </a>
-            {{if user}}
-                <a class="navbar-item" href="#submit">
-                    Submit
-                </a>
-            {{/if}}
         </div>
     
         <div class="navbar-end">
             {{if user}}
-            <div class="navbar-item">
+                <a class="navbar-item" href="#submit">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+                <a class="navbar-item" href="#create-acc">
+                    <i class="fas fa-user-plus"></i>
+                </a>
+            {{/if}}
+            {{if user}}
+                <div class="navbar-item">
                     <div class="field is-grouped">
                         <p class="control tooltip is-tooltip-bottom" data-tooltip="Bandwidth (+1 byte per minute per coin you own; max 1MB)">
                             <progress class="progress is-primary" style="width: 100px" value="{{user.bw | growBandwidth}}" max="1048576"></progress>
