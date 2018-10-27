@@ -2,7 +2,8 @@
     <div class="container">
         <div class="is-pulled-left" style="margin-right: 15px;">{{include 'arrows.html'}}</div>
 
-        By <a href="#u/{{author}}">{{author}}</a>
+        <a href="#u/{{author}}">{{author}}</a>
+        <small>{{_id | formatTime}}</small>
         <h1 class="title">{{json.title}}</h1>
         {{@ json.message | markdown}}        
         <hr>

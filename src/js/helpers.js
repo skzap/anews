@@ -1,5 +1,6 @@
 var markdown = require( "markdown" ).markdown
 var xss = require("xss")
+var moment = require("moment")
 
 class GrowInt {
     constructor(raw, config) {
@@ -69,4 +70,31 @@ template.defaults.imports.growBandwidth = function(raw) {
 template.defaults.imports.growVoteTokens = function(raw, balance) {
     return new GrowInt(raw, {growth:proxy.user.balance/(3600000)})
         .grow(new Date().getTime()).v
+}
+template.defaults.imports.formatKb = function(num) {
+    return Math.floor(num/1024)+'KB'
+}
+template.defaults.imports.cuteNumber = function(num, digits) {
+    if (typeof digits === 'undefined') digits = 2
+    var units = ['K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
+    var decimal
+    var newNum = num
+
+    for(var i=units.length-1; i>=0; i--) {
+        decimal = Math.pow(1000, i+1)
+
+        if(num <= -decimal || num >= decimal) {
+            newNum = +(num / decimal).toFixed(digits) + units[i]
+            break
+        }
+    }
+    var limit = (newNum<0 ? 5 : 4)
+    if (newNum.toString().length > limit && digits>0)
+        return template.defaults.imports.cuteNumber(num, digits-1)
+
+    return newNum;
+}
+template.defaults.imports.formatTime = function(id) {
+    var date = new Date(parseInt( id.toString().substring(0,8), 16 ) * 1000)
+    return moment(date).fromNow()
 }

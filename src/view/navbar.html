@@ -29,13 +29,6 @@
             {{if user}}
                 <div class="navbar-item">
                     <div class="field is-grouped">
-                        <p class="control tooltip is-tooltip-bottom" data-tooltip="Bandwidth (+1 byte per minute per coin you own; max 1MB)">
-                            <progress class="progress is-primary" style="width: 100px" value="{{user.bw | growBandwidth}}" max="1048576"></progress>
-                        </p>
-                    </div>
-                </div>
-                <div class="navbar-item">
-                    <div class="field is-grouped">
                         <p class="control tooltip is-tooltip-bottom" data-tooltip="Coins Balance">
                             <i class="fas fa-coins"></i> {{user.balance}}
                         </p>
@@ -44,7 +37,7 @@
                 <div class="navbar-item">
                     <div class="field is-grouped">
                         <p class="control tooltip is-tooltip-bottom" data-tooltip="Vote Tokens (+1 per hour per coin you own)">
-                            <i class="fas fa-flask"></i> {{user.vt | growVoteTokens}}
+                            <i class="fas fa-flask"></i> {{user.vt | growVoteTokens | cuteNumber}}
                         </p>
                     </div>
                 </div>

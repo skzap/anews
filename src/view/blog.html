@@ -1,26 +1,82 @@
 <div id="blog">
-    <div class="container">
-        <h1 class="title">Contents from {{username}}</h1>
-        {{each contents}}
-            <article class="media">
-                <figure class="media-left">
-                    {{include 'arrows.html' $value}}
-                </figure>
-                <div class="media-content">
-                    <div class='box'>
-                        <a href="#post/{{$value.author}}/{{$value.link}}"><h4 class="title is-4">{{$value.json.title}}</h4></a>
-                        by <a href="#u/{{$value.author}}">{{$value.author}}</a>
-                        |
-                        <a href="#post/{{$value.author}}/{{$value.link}}">
-                            {{if $value.child | isPlural}}
-                                {{$value.child | arrayLength}} <i class="fas fa-comments"></i>
-                            {{else}}
-                                {{$value.child | arrayLength}} <i class="fas fa-comment"></i>
-                            {{/if}}
-                        </a>
+    <div class="container" style="margin-top: 5px;">
+        <div class="columns">
+            <div class="column">
+                {{each contents}}
+                    <article class="media">
+                        <figure class="media-left">
+                            {{include 'arrows.html' $value}}
+                        </figure>
+                        <div class="media-content">
+                            <div class='box'>
+                                <a href="#post/{{$value.author}}/{{$value.link}}"><h4 class="title is-4">{{$value.json.title}}</h4></a>
+                                by <a href="#u/{{$value.author}}">{{$value.author}}</a>
+                                |
+                                <a href="#post/{{$value.author}}/{{$value.link}}">
+                                    {{if $value.child | isPlural}}
+                                        {{$value.child | arrayLength}} <i class="fas fa-comments"></i>
+                                    {{else}}
+                                        {{$value.child | arrayLength}} <i class="fas fa-comment"></i>
+                                    {{/if}}
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                {{/each}}
+            </div>
+            <div class="column is-one-fifth">
+                <div class="box has-text-centered">
+                    <h2 class="is-size-5">{{account.name}}</h2>
+                    <i class="fas fa-coins"></i> {{account.balance}} <br />
+                    <i class="fas fa-flask"></i> {{account.vt | growVoteTokens | cuteNumber}} <br />
+                    <i class="fas fa-hdd"></i> {{account.bw | growVoteTokens | formatKb}} <br />
+                    <hr>
+                    <a class="button is-primary">
+                        <span class="fas fa-hand-holding-usd"></span>
+                        Transfer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="modal-transfer">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Transfer Coins</p>
+                <button class="delete modal-close" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">To User:</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <p class="control">
+                                <input id="inputTransferUser" class="input" type="text">
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </article>
-        {{/each}}
+                    
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">Amount:</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <p class="control">
+                                <input id="inputTransferAmount" class="input" type="number" min="1">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success confirm">Confirm</button>
+                <button class="button cancel">Cancel</button>
+            </footer>
+        </div>
     </div>
 </div>

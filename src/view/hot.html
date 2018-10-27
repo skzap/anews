@@ -9,7 +9,9 @@
                 <div class="media-content">
                     <div class='box'>
                         <a href="#post/{{$value.author}}/{{$value.link}}"><h4 class="title is-4">{{$value.json.title}}</h4></a>
-                        by <a href="#u/{{$value.author}}">{{$value.author}}</a>
+                        <a href="#u/{{$value.author}}">{{$value.author}}</a>
+                        |
+                        <small>{{$value._id | formatTime}}</small>
                         |
                         <a href="#post/{{$value.author}}/{{$value.link}}">
                             {{if $value.child | isPlural}}

@@ -166,9 +166,11 @@ Router
             if (results[i].json.title)
                 proxy.blog.contents.push(results[i])
         }
-
-        document.getElementById('content').innerHTML = template('blog.html', proxy.blog)
-        bind.blog()
+        avalon.getAccount(author, function(err, account) {
+            proxy.blog.account = account
+            document.getElementById('content').innerHTML = template('blog.html', proxy.blog)
+            bind.blog()
+        })
     })
 })
 .add(function() {

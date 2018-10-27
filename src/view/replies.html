@@ -5,7 +5,8 @@
     <div class="media-content">
         <div class="content" data-author="{{author}}" data-link="{{link}}">
             <p>
-                <strong>{{author}}</strong> <small>{{_id}}</small>
+                <a href="#u/{{author}}">{{author}}</a>
+                <small>{{_id | formatTime}}</small>
                 <br>
                 {{@ json.message | markdown}}    
             </p>

@@ -129,7 +129,45 @@ window.bind = {
         
     },
     blog: function() {
+        var transferButton = blog.getElementsByClassName('button')[0]
+        var transferConfirm = blog.getElementsByClassName('button confirm')[0]
+        var transferModal = blog.getElementsByClassName('modal')[0]
+        var closeModal = blog.getElementsByClassName('modal-close')[0]
+        var transferCancel = blog.getElementsByClassName('button cancel')[0]
+        var transferUserInput = blog.getElementsByClassName('input')[0]
+        var transferAmountInput = blog.getElementsByClassName('input')[1]
         
+        transferButton.onclick = () => {
+            transferModal.classList.add('is-active')
+            transferUserInput.value = Router.getFragment().split('/')[1]
+        }
+
+        transferConfirm.onclick = () => {
+            if (!proxy.user || !proxy.user.privatekey || !proxy.user.username) {
+                console.log('Needs to be logged in')
+                transferModal.classList.remove('is-active')
+                navbar.getElementsByClassName('modal')[0].classList.add('is-active')
+                return
+            }
+            var user = transferUserInput.value
+            var amount = parseInt(transferAmountInput.value)
+            var tx = {
+                type: 3,
+                data: {
+                    receiver: user,
+                    amount: amount
+                }
+            }
+            tx = avalon.sign(proxy.user.privatekey, proxy.user.username, tx)
+            transferConfirm.classList.add('is-loading')
+            avalon.sendTransaction(tx, function(res) {
+                transferConfirm.classList.remove('is-loading')
+                transferModal.classList.remove('is-active')
+            })
+        }
+
+        closeModal.onclick = () => transferModal.classList.remove('is-active')
+        transferCancel.onclick = () => transferModal.classList.remove('is-active')
     },
     createacc: function() {
         var inputPubKey = createacc.getElementsByClassName('input')[0]
