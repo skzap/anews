@@ -216,6 +216,17 @@ Router
         })
     })
 })
+.add(/history\/(.*)/, function() {
+    var author = arguments[0]
+    proxy.history = {name: author}
+    console.log(author)
+    avalon.getAccountHistory(author, 0, function(err, results) {
+        console.log(results)
+        proxy.history.blocks = results
+        document.getElementById('content').innerHTML = template('acchistory.html', proxy.history)
+        bind.acchistory()
+    })
+})
 .add(function() {
     avalon.getHotDiscussions(function(err, results) {
         proxy.hot.contents = []
@@ -248,14 +259,25 @@ var crypto = (self.crypto || self.msCrypto), QUOTA = 65536;
 
 window.avalon = {
     config: {
-        api: ['https://api.avalon.wtf']
-        //api: ['http://localhost:3001']
+        //api: ['https://api.avalon.wtf']
+        api: ['http://localhost:3001']
     },
     init: (config) => {
         avalon.config = config
     },
     getAccount: (name, cb) => {
         fetch(avalon.randomNode()+'/account/'+name, {
+            method: 'get',
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json'
+            }
+        }).then(res => res.json()).then(function(res) {
+            cb(null, res)
+        });
+    },
+    getAccountHistory: (name, lastBlock, cb) => {
+        fetch(avalon.randomNode()+'/blog/'+name+'/history/'+lastBlock, {
             method: 'get',
             headers: {
               'Accept': 'application/json, text/plain, */*',
@@ -839,6 +861,12 @@ template.defaults.imports.cuteNumber = function(num, digits) {
 template.defaults.imports.formatTime = function(id) {
     var date = new Date(parseInt( id.toString().substring(0,8), 16 ) * 1000)
     return moment(date).fromNow()
+}
+template.defaults.imports.timeFromNow = function(ts) {
+    return moment(ts).fromNow()
+}
+template.defaults.imports.timeZulu = function(ts) {
+    return moment(ts).format()
 }
 var templates = []
 

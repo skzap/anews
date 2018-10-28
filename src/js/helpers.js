@@ -98,3 +98,9 @@ template.defaults.imports.formatTime = function(id) {
     var date = new Date(parseInt( id.toString().substring(0,8), 16 ) * 1000)
     return moment(date).fromNow()
 }
+template.defaults.imports.timeFromNow = function(ts) {
+    return moment(ts).fromNow()
+}
+template.defaults.imports.timeZulu = function(ts) {
+    return moment(ts).format()
+}

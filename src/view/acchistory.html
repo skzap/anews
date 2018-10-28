@@ -1,0 +1,26 @@
+<div id="acchistory">
+    <div class="container">
+        <h1 class="title">Txs involving {{name}}</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Type</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{each blocks}}
+                    {{each $value.txs}}
+                    <tr>
+                        <td><abbr title="{{$value.ts | timeZulu}}">{{$value.ts | timeFromNow}}</abbr></td>
+                        <td>{{$value.type}}</td>
+                        <td>{{$value.data}}</td>
+                    </tr>
+                    {{/each}}
+                {{/each}}
+            </tbody>
+        </table>
+        
+    </div>
+</div>

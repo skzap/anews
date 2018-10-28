@@ -22,6 +22,31 @@
         <h1>404 Error</h1>
         <h2>Route not found</h2>
     </center>
+</div></script><script id="acchistory.html" type="text/html"><div id="acchistory">
+    <div class="container">
+        <h1 class="title">Txs involving {{name}}</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Type</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{each blocks}}
+                    {{each $value.txs}}
+                    <tr>
+                        <td><abbr title="{{$value.ts | timeZulu}}">{{$value.ts | timeFromNow}}</abbr></td>
+                        <td>{{$value.type}}</td>
+                        <td>{{$value.data}}</td>
+                    </tr>
+                    {{/each}}
+                {{/each}}
+            </tbody>
+        </table>
+        
+    </div>
 </div></script><script id="arrows.html" type="text/html"><a onclick="bind.arrows.upvote(this)" data-author="{{author}}" data-link="{{link}}">
     <span class="icon">
         <i class="fas fa-chevron-up"></i>
@@ -70,6 +95,10 @@
                     <a class="button is-primary">
                         <span class="fas fa-hand-holding-usd"></span>
                         Transfer
+                    </a>
+                    <a class="button is-primary" href='#history/{{account.name}}'>
+                        <span class="fas fa-list-ol"></span>
+                        History
                     </a>
                 </div>
             </div>

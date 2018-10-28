@@ -6,14 +6,25 @@ var crypto = (self.crypto || self.msCrypto), QUOTA = 65536;
 
 window.avalon = {
     config: {
-        api: ['https://api.avalon.wtf']
-        //api: ['http://localhost:3001']
+        //api: ['https://api.avalon.wtf']
+        api: ['http://localhost:3001']
     },
     init: (config) => {
         avalon.config = config
     },
     getAccount: (name, cb) => {
         fetch(avalon.randomNode()+'/account/'+name, {
+            method: 'get',
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json'
+            }
+        }).then(res => res.json()).then(function(res) {
+            cb(null, res)
+        });
+    },
+    getAccountHistory: (name, lastBlock, cb) => {
+        fetch(avalon.randomNode()+'/blog/'+name+'/history/'+lastBlock, {
             method: 'get',
             headers: {
               'Accept': 'application/json, text/plain, */*',

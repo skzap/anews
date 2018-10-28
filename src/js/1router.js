@@ -173,6 +173,17 @@ Router
         })
     })
 })
+.add(/history\/(.*)/, function() {
+    var author = arguments[0]
+    proxy.history = {name: author}
+    console.log(author)
+    avalon.getAccountHistory(author, 0, function(err, results) {
+        console.log(results)
+        proxy.history.blocks = results
+        document.getElementById('content').innerHTML = template('acchistory.html', proxy.history)
+        bind.acchistory()
+    })
+})
 .add(function() {
     avalon.getHotDiscussions(function(err, results) {
         proxy.hot.contents = []
