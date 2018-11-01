@@ -1,21 +1,23 @@
 <div id="acchistory">
     <div class="container">
-        <h1 class="title">Txs involving {{name}}</h1>
+        <h1 class="title">Txs involving <a href='#/u/{{name}}'>{{name}}</a></h1>
         <table class="table">
             <thead>
                 <tr>
                     <th>Time</th>
+                    <th>Sender</th>
                     <th>Type</th>
                     <th>Data</th>
                 </tr>
             </thead>
             <tbody>
                 {{each blocks}}
-                    {{each $value.txs}}
+                    {{each $value.txs tx}}
                     <tr>
-                        <td><abbr title="{{$value.ts | timeZulu}}">{{$value.ts | timeFromNow}}</abbr></td>
-                        <td>{{$value.type}}</td>
-                        <td>{{$value.data}}</td>
+                        <td><abbr title="Block #{{$value._id}} on {{tx.ts | timeZulu}}">{{tx.ts | timeFromNow}}</abbr></td>
+                        <td>{{tx.sender}}</td>
+                        <td>{{tx.type | formatTxType}}</td>
+                        <td><code>{{tx.data}}</code></td>
                     </tr>
                     {{/each}}
                 {{/each}}

@@ -104,3 +104,21 @@ template.defaults.imports.timeFromNow = function(ts) {
 template.defaults.imports.timeZulu = function(ts) {
     return moment(ts).format()
 }
+template.defaults.imports.formatTxType = function(num) {
+    var TransactionType = {
+        NEW_ACCOUNT: 0,
+        APPROVE_NODE_OWNER: 1,
+        DISAPROVE_NODE_OWNER: 2,
+        TRANSFER: 3,
+        COMMENT: 4,
+        VOTE: 5,
+        USER_JSON: 6,
+        FOLLOW: 7,
+        UNFOLLOW: 8,
+        RESHARE: 9, // not sure
+    };
+
+    for(var t in TransactionType)
+        if (TransactionType[t] == num)
+            return t
+}

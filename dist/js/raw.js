@@ -219,9 +219,7 @@ Router
 .add(/history\/(.*)/, function() {
     var author = arguments[0]
     proxy.history = {name: author}
-    console.log(author)
     avalon.getAccountHistory(author, 0, function(err, results) {
-        console.log(results)
         proxy.history.blocks = results
         document.getElementById('content').innerHTML = template('acchistory.html', proxy.history)
         bind.acchistory()
@@ -259,7 +257,8 @@ var crypto = (self.crypto || self.msCrypto), QUOTA = 65536;
 
 window.avalon = {
     config: {
-        api: ['https://api.avalon.wtf']
+        //api: ['https://api.avalon.wtf'],
+        api: ['https://bran.nannal.com'],
         //api: ['http://localhost:3001']
     },
     init: (config) => {
@@ -570,6 +569,7 @@ window.bind = {
         var transferCancel = blog.getElementsByClassName('button cancel')[0]
         var transferUserInput = blog.getElementsByClassName('input')[0]
         var transferAmountInput = blog.getElementsByClassName('input')[1]
+        var transferMemoInput = blog.getElementsByClassName('input')[2]
         
         transferButton.onclick = () => {
             transferModal.classList.add('is-active')
@@ -585,18 +585,26 @@ window.bind = {
             }
             var user = transferUserInput.value
             var amount = parseInt(transferAmountInput.value)
+            var memo = transferMemoInput.value
             var tx = {
                 type: 3,
                 data: {
                     receiver: user,
-                    amount: amount
+                    amount: amount,
+                    memo: memo
                 }
             }
             tx = avalon.sign(proxy.user.privatekey, proxy.user.username, tx)
             transferConfirm.classList.add('is-loading')
             avalon.sendTransaction(tx, function(res) {
                 transferConfirm.classList.remove('is-loading')
-                transferModal.classList.remove('is-active')
+                if (res === 'OK') {
+                    transferModal.classList.remove('is-active')
+                    notifier.success('Transfer sent')
+                } else {
+                    notifier.alert('Error sending transfer')
+                }
+                
             })
         }
 
@@ -629,12 +637,15 @@ window.bind = {
             submitButton.classList.add('is-loading')
             avalon.sendTransaction(tx, function(res) {
                 submitButton.classList.remove('is-loading')
-                console.log(res)
-                document.getElementById("resUsername").innerHTML = inputUsername.value
-                document.getElementById("resPubKey").innerHTML = inputPubKey.value
-                document.getElementById("new-account-success").style.display = "block"
-                inputPubKey.value = ""
-                inputUsername.value = ""
+                if (res === 'OK') {
+                    document.getElementById("resUsername").innerHTML = inputUsername.value
+                    document.getElementById("resPubKey").innerHTML = inputPubKey.value
+                    document.getElementById("new-account-success").style.display = "block"
+                    inputPubKey.value = ""
+                    inputUsername.value = ""
+                } else {
+                    notifier.alert(res)
+                }
             })
         }
         cancelButton.onclick = () => {
@@ -867,6 +878,24 @@ template.defaults.imports.timeFromNow = function(ts) {
 }
 template.defaults.imports.timeZulu = function(ts) {
     return moment(ts).format()
+}
+template.defaults.imports.formatTxType = function(num) {
+    var TransactionType = {
+        NEW_ACCOUNT: 0,
+        APPROVE_NODE_OWNER: 1,
+        DISAPROVE_NODE_OWNER: 2,
+        TRANSFER: 3,
+        COMMENT: 4,
+        VOTE: 5,
+        USER_JSON: 6,
+        FOLLOW: 7,
+        UNFOLLOW: 8,
+        RESHARE: 9, // not sure
+    };
+
+    for(var t in TransactionType)
+        if (TransactionType[t] == num)
+            return t
 }
 var templates = []
 

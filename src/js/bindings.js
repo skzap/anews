@@ -136,6 +136,7 @@ window.bind = {
         var transferCancel = blog.getElementsByClassName('button cancel')[0]
         var transferUserInput = blog.getElementsByClassName('input')[0]
         var transferAmountInput = blog.getElementsByClassName('input')[1]
+        var transferMemoInput = blog.getElementsByClassName('input')[2]
         
         transferButton.onclick = () => {
             transferModal.classList.add('is-active')
@@ -151,18 +152,26 @@ window.bind = {
             }
             var user = transferUserInput.value
             var amount = parseInt(transferAmountInput.value)
+            var memo = transferMemoInput.value
             var tx = {
                 type: 3,
                 data: {
                     receiver: user,
-                    amount: amount
+                    amount: amount,
+                    memo: memo
                 }
             }
             tx = avalon.sign(proxy.user.privatekey, proxy.user.username, tx)
             transferConfirm.classList.add('is-loading')
             avalon.sendTransaction(tx, function(res) {
                 transferConfirm.classList.remove('is-loading')
-                transferModal.classList.remove('is-active')
+                if (res === 'OK') {
+                    transferModal.classList.remove('is-active')
+                    notifier.success('Transfer sent')
+                } else {
+                    notifier.alert('Error sending transfer')
+                }
+                
             })
         }
 
@@ -195,12 +204,15 @@ window.bind = {
             submitButton.classList.add('is-loading')
             avalon.sendTransaction(tx, function(res) {
                 submitButton.classList.remove('is-loading')
-                console.log(res)
-                document.getElementById("resUsername").innerHTML = inputUsername.value
-                document.getElementById("resPubKey").innerHTML = inputPubKey.value
-                document.getElementById("new-account-success").style.display = "block"
-                inputPubKey.value = ""
-                inputUsername.value = ""
+                if (res === 'OK') {
+                    document.getElementById("resUsername").innerHTML = inputUsername.value
+                    document.getElementById("resPubKey").innerHTML = inputPubKey.value
+                    document.getElementById("new-account-success").style.display = "block"
+                    inputPubKey.value = ""
+                    inputUsername.value = ""
+                } else {
+                    notifier.alert(res)
+                }
             })
         }
         cancelButton.onclick = () => {

@@ -5,12 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Avalon News</title>
         <link href="css/main.css" rel="stylesheet">
-        <script src="js/template-web.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/ipfs/0.32.0-rc.1/index.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-        <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
         <link href="css/pageloader.css" rel="stylesheet">
         <link href="css/tooltip.css" rel="stylesheet">
+        <link href="css/notifs.css" rel="stylesheet">
+
+        <script src="js/template-web.js"></script>
+        <script src="js/notifs.js"></script>
+        <script>notifier = new AWN({})</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ipfs/0.32.0-rc.1/index.min.js"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
     </head>
     
     <body style='margin:0'>
@@ -24,22 +28,24 @@
     </center>
 </div></script><script id="acchistory.html" type="text/html"><div id="acchistory">
     <div class="container">
-        <h1 class="title">Txs involving {{name}}</h1>
+        <h1 class="title">Txs involving <a href='#/u/{{name}}'>{{name}}</a></h1>
         <table class="table">
             <thead>
                 <tr>
                     <th>Time</th>
+                    <th>Sender</th>
                     <th>Type</th>
                     <th>Data</th>
                 </tr>
             </thead>
             <tbody>
                 {{each blocks}}
-                    {{each $value.txs}}
+                    {{each $value.txs tx}}
                     <tr>
-                        <td><abbr title="{{$value.ts | timeZulu}}">{{$value.ts | timeFromNow}}</abbr></td>
-                        <td>{{$value.type}}</td>
-                        <td>{{$value.data}}</td>
+                        <td><abbr title="Block #{{$value._id}} on {{tx.ts | timeZulu}}">{{tx.ts | timeFromNow}}</abbr></td>
+                        <td>{{tx.sender}}</td>
+                        <td>{{tx.type | formatTxType}}</td>
+                        <td><code>{{tx.data}}</code></td>
                     </tr>
                     {{/each}}
                 {{/each}}
@@ -137,6 +143,19 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Memo:</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <p class="control">
+                                    <input id="inputTransferMemo" class="input" type="text">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
             </section>
             <footer class="modal-card-foot">
                 <button class="button is-success confirm">Confirm</button>
