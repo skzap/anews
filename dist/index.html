@@ -388,7 +388,9 @@
         <a href="#u/{{author}}">{{author}}</a>
         <small>{{_id | formatTime}}</small>
         <h1 class="title">{{json.title}}</h1>
-        {{@ json.message | markdown}}        
+        <div class="content">
+            {{@ json.message | markdown}}   
+        </div>     
         <hr>
         <div class="field">
             <label class="label">Message</label>
@@ -469,6 +471,10 @@
             <div class="control">
                 <button class="button cancel is-text">Cancel</button>
             </div>
+        </div>
+        <div>
+            <h3>Preview</h3>
+            <div id="markdownPreview" class="content box"></div>
         </div>
     </div>
 </div></script>

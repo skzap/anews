@@ -5,7 +5,9 @@
         <a href="#u/{{author}}">{{author}}</a>
         <small>{{_id | formatTime}}</small>
         <h1 class="title">{{json.title}}</h1>
-        {{@ json.message | markdown}}        
+        <div class="content">
+            {{@ json.message | markdown}}   
+        </div>     
         <hr>
         <div class="field">
             <label class="label">Message</label>

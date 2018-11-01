@@ -1,3 +1,6 @@
+var markdown = require( "markdown" ).markdown
+var xss = require("xss")
+
 window.bind = {
     navbar: function() {
         var loginModal = navbar.getElementsByClassName('modal')[0]
@@ -120,6 +123,10 @@ window.bind = {
         cancelButton.onclick = () => {
             inputTitle.value = ""
             inputMessage.value = ""
+        }
+        inputMessage.onkeyup = () => {
+            var md = markdown.toHTML(inputMessage.value)
+            document.getElementById('markdownPreview').innerHTML = filterXSS(md)
         }
     },
     new: function() {
