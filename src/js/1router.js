@@ -93,30 +93,6 @@ Router
 // .add(/products\/(.*)\/edit\/(.*)/, function() {
 //     console.log('products', arguments);
 // })
-.add(/new/, function() {
-    avalon.getNewDiscussions(function(err, results) {
-        proxy.new.contents = []
-        for (let i = 0; i < results.length; i++) {
-            const element = results[i];
-            results[i].ups = 0
-            results[i].downs = 0
-            if (results[i].votes) {
-                for (let y = 0; y < results[i].votes.length; y++) {
-                    if (results[i].votes[y].vt > 0)
-                        results[i].ups += results[i].votes[y].vt
-                    if (results[i].votes[y].vt < 0)
-                        results[i].downs += results[i].votes[y].vt
-                }
-            }
-            results[i].totals = results[i].ups + results[i].downs
-            if (results[i].json.title)
-                proxy.new.contents.push(results[i])
-        }
-        
-        document.getElementById('content').innerHTML = template('new.html', proxy.new)
-        bind.new()
-    })
-})
 .add(/submit/, function() {
     document.getElementById('content').innerHTML = template('submit.html', {})
     bind.submit()
@@ -182,6 +158,30 @@ Router
         bind.acchistory()
     })
 })
+.add(/new/, function() {
+    avalon.getNewDiscussions(function(err, results) {
+        proxy.new.contents = []
+        for (let i = 0; i < results.length; i++) {
+            const element = results[i];
+            results[i].ups = 0
+            results[i].downs = 0
+            if (results[i].votes) {
+                for (let y = 0; y < results[i].votes.length; y++) {
+                    if (results[i].votes[y].vt > 0)
+                        results[i].ups += results[i].votes[y].vt
+                    if (results[i].votes[y].vt < 0)
+                        results[i].downs += results[i].votes[y].vt
+                }
+            }
+            results[i].totals = results[i].ups + results[i].downs
+            if (results[i].json.title && results[i].json.app && results[i].json.app == 'news')
+                proxy.new.contents.push(results[i])
+        }
+        
+        document.getElementById('content').innerHTML = template('new.html', proxy.new)
+        bind.new()
+    })
+})
 .add(function() {
     avalon.getHotDiscussions(function(err, results) {
         proxy.hot.contents = []
@@ -197,7 +197,7 @@ Router
                 }
             }
             results[i].totals = results[i].ups + results[i].downs
-            if (results[i].json.title)
+            if (results[i].json.title && results[i].json.app && results[i].json.app == 'news')
                 proxy.hot.contents.push(results[i])
         }
         
